@@ -1,0 +1,25 @@
+class Employee  
+{  
+    int id,salary;  
+    String name;  
+    String city;  
+    Employee(int id, String name, int salary ,String city)  
+    {  
+         this.id=id;  
+         this.name=name;  
+         this.salary=salary;  
+         this.city=city;  
+    }  
+    public String toString() // overrides toString() method  
+    {  
+        return id+" "+name+" "+salary+" "+city;  
+    }  
+    public static void main(String args[])  
+    {  
+        Employee E1=new Employee(111,"Rakesh",50000,"Lucknow");  
+        Employee E2=new Employee(112,"Suresh",25000,"Kanpur");  
+        // both will print Employee.toString()  
+        System.out.println("Employee details: "+E1);  
+        System.out.println("Employee details: "+E2);  
+     }  
+} 

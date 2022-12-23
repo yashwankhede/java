@@ -1,0 +1,32 @@
+public class ReadFileReverse {
+
+public int[] readByte(File _file) throws IOException {
+    FileInputStream source = new FileInputStream(_file);
+    int currentByte = source.available();
+    int readCount = 0;
+
+    int byteContainer[] = new int[currentByte];
+    while(readCount < currentByte){
+        byteContainer[readCount] = source.read();
+        readCount++;
+    }
+    source.close();
+    return byteContainer;
+}
+
+public void printReverse(int[] fileContent){
+    for(int byt=fileContent.length -1; byt >= 0 ; byt--){
+        System.out.print((char) fileContent[byt]);
+    }
+}
+
+public static void main(String[] args) throws IOException {
+    File fileToRead = new File("/README.txt");
+
+    ReadFileReverse demo = new ReadFileReverse ();
+    int[] readBytes = demo.readByte(fileToRead);
+
+    demo.printReverse(readBytes);
+}
+
+}
