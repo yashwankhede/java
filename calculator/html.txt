@@ -1,0 +1,6 @@
+<html>
+  <body>
+    <applet code="Calculator1.java" width ="300" height ="300">
+    </applet>
+  </body>
+</html>
