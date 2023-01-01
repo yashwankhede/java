@@ -1,2 +1,0 @@
-javac Calculator1.java
-appletviewer Calculator1.html
