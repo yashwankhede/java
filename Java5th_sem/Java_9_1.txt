@@ -1,0 +1,75 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+public class BallThread extends JPanel implements ActionListener, Runnable {
+
+    private static final long serialVersionUID = 1L;
+    private int x, y, width = 20, height = 20;
+    private JButton startButton, stopButton;
+    private boolean isRunning;
+
+    public BallThread() {
+        this.setLayout(null);
+
+        startButton = new JButton("Start");
+        startButton.setBounds(10, 10, 80, 30);
+        startButton.addActionListener(this);
+        this.add(startButton);
+
+        stopButton = new JButton("Stop");
+        stopButton.setBounds(100, 10, 80, 30);
+        stopButton.addActionListener(this);
+        this.add(stopButton);
+
+        x = 50;
+        y = 50;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == startButton) {
+            isRunning = true;
+            Thread t = new Thread(this);
+            t.start();
+        } else if (e.getSource() == stopButton) {
+            isRunning = false;
+        }
+    }
+
+    public void paint(Graphics g) {
+        super.paint(g);
+        g.setColor(Color.RED);
+        g.fillOval(x, y, width, height);
+    }
+
+    public void run() {
+        while (isRunning) {
+            y += 10;
+            if (y > getHeight()) {
+                y = 0;
+            }
+            repaint();
+            try {
+                Thread.sleep((int) (Math.random() * 500));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Ball Thread Example");
+        frame.setSize(300, 300);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        frame.getContentPane().add(new BallThread());
+        frame.setVisible(true);
+    }
+
+}

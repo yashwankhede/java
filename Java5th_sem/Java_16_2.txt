@@ -1,0 +1,91 @@
+import java.sql.*;
+
+public class TeacherDetails {
+    static final String DB_URL = "jdbc:mysql://localhost/teacher_db";
+    static final String USER = "root";
+    static final String PASS = "password";
+
+    public static void main(String[] args) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        Statement stmt = null;
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            System.out.println("Creating table...");
+            stmt = conn.createStatement();
+
+            String sql = "CREATE TABLE IF NOT EXISTS Teacher " +
+                         "(TNo INT NOT NULL AUTO_INCREMENT, " +
+                         " TName VARCHAR(255), " +
+                         " Subject VARCHAR(255), " +
+                         " PRIMARY KEY ( TNo ))";
+
+            stmt.executeUpdate(sql);
+
+            System.out.println("Table created successfully...");
+
+            System.out.println("Inserting records into the table...");
+            String insertSql = "INSERT INTO Teacher (TName, Subject) VALUES (?, ?)";
+            pstmt = conn.prepareStatement(insertSql);
+
+            pstmt.setString(1, "John Doe");
+            pstmt.setString(2, "JAVA");
+            pstmt.executeUpdate();
+
+            pstmt.setString(1, "Jane Smith");
+            pstmt.setString(2, "C++");
+            pstmt.executeUpdate();
+
+            pstmt.setString(1, "Peter Parker");
+            pstmt.setString(2, "JAVA");
+            pstmt.executeUpdate();
+
+            pstmt.setString(1, "Mary Jane");
+            pstmt.setString(2, "Python");
+            pstmt.executeUpdate();
+
+            pstmt.setString(1, "Tony Stark");
+            pstmt.setString(2, "JAVA");
+            pstmt.executeUpdate();
+
+            System.out.println("Records inserted successfully...");
+
+            System.out.println("Displaying details of Teacher teaching JAVA Subject...");
+            String selectSql = "SELECT * FROM Teacher WHERE Subject = ?";
+            pstmt = conn.prepareStatement(selectSql);
+            pstmt.setString(1, "JAVA");
+
+            ResultSet rs = pstmt.executeQuery();
+
+            while(rs.next()){
+                System.out.println("Teacher ID: " + rs.getInt("TNo"));
+                System.out.println("Teacher Name: " + rs.getString("TName"));
+                System.out.println("Subject: " + rs.getString("Subject"));
+            }
+
+            rs.close();
+            pstmt.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+}

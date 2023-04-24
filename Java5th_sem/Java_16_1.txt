@@ -1,0 +1,20 @@
+import java.util.TreeSet;
+
+public class TreeSetExample {
+    public static void main(String[] args) {
+        // create a TreeSet of colors
+        TreeSet<String> colorSet = new TreeSet<String>();
+
+        // add some colors to the TreeSet
+        colorSet.add("Red");
+        colorSet.add("Green");
+        colorSet.add("Blue");
+        colorSet.add("Yellow");
+
+        // print out the contents of the TreeSet in ascending order
+        System.out.println("Colors in TreeSet in ascending order:");
+        for (String color : colorSet) {
+            System.out.println(color);
+        }
+    }
+}

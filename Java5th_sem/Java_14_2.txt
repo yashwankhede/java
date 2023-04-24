@@ -1,0 +1,35 @@
+<%@ page language="java" %>
+<html>
+<head>
+<title>Sum of First and Last Digit</title>
+</head>
+<body>
+    <%
+        int num = Integer.parseInt(request.getParameter("num"));
+        int first = 0, last = 0, count = 0, sum = 0;
+        
+        // Calculate the first and last digits
+        last = num % 10;
+        while (num > 0) {
+            int digit = num % 10;
+            if (num < 10) {
+                first = digit;
+            }
+            num = num / 10;
+            count++;
+        }
+        
+        // Calculate the sum of the first and last digits
+        sum = first + last;
+    %>
+    
+    <h2>Sum of First and Last Digit</h2>
+    <hr>
+    
+    <p>The given number is: <%= num %></p>
+    <p>The first digit is: <%= first %></p>
+    <p>The last digit is: <%= last %></p>
+    <p>The sum of the first and last digits is: <span style="color:red; font-size:18px;"><%= sum %></span></p>
+    
+</body>
+</html>
