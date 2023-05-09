@@ -1,0 +1,77 @@
+Q1.
+
+import java.sql.*;
+
+public class DatabaseMetaDataExample {
+    public static void main(String[] args) {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "root", "password");
+
+            // Get database metadata
+            DatabaseMetaData metaData = con.getMetaData();
+
+            // Display database information
+            System.out.println("Database Product Name: " + metaData.getDatabaseProductName());
+            System.out.println("Database Product Version: " + metaData.getDatabaseProductVersion());
+            System.out.println("Driver Name: " + metaData.getDriverName());
+            System.out.println("Driver Version: " + metaData.getDriverVersion());
+
+            // List all tables in the database
+            ResultSet rs = metaData.getTables(null, null, "%", new String[] {"TABLE"});
+            System.out.println("Tables:");
+            while (rs.next()) {
+                String tableName = rs.getString("TABLE_NAME");
+                System.out.println(tableName);
+            }
+
+            // Close connections
+            rs.close();
+            con.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+}
+
+======================
+Q2.
+
+import java.util.Random;
+
+public class ThreadLifecycle implements Runnable {
+    private String threadName;
+
+    public ThreadLifecycle(String name) {
+        this.threadName = name;
+    }
+
+    public void run() {
+        System.out.println("Thread " + threadName + " created.");
+        
+        // Generate random sleep time
+        Random rand = new Random();
+        int sleepTime = rand.nextInt(5000);
+        
+        try {
+            // Sleep for random time
+            Thread.sleep(sleepTime);
+            System.out.println("Thread " + threadName + " slept for " + sleepTime + " milliseconds.");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Thread " + threadName + " dead.");
+    }
+
+    public static void main(String[] args) {
+        // Create threads and start them
+        Thread t1 = new Thread(new ThreadLifecycle("Thread 1"));
+        Thread t2 = new Thread(new ThreadLifecycle("Thread 2"));
+        Thread t3 = new Thread(new ThreadLifecycle("Thread 3"));
+
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}

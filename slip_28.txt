@@ -1,0 +1,37 @@
+Q1.
+
+<%@ page language="java" %>
+<html>
+<head>
+<title>Reverse String</title>
+</head>
+<body>
+    <h1>Enter a String:</h1>
+    <form method="post" action="reverse.jsp">
+        <input type="text" name="inputString">
+        <input type="submit" value="Reverse">
+    </form>
+    <br>
+    <%
+    String inputString = request.getParameter("inputString");
+    if (inputString != null) {
+        StringBuilder reversedString = new StringBuilder();
+        for (int i = inputString.length() - 1; i >= 0; i--) {
+            reversedString.append(inputString.charAt(i));
+        }
+        out.println("<h2>Reversed String: " + reversedString.toString() + "</h2>");
+    }
+    %>
+</body>
+</html>
+
+
+==========================
+Q2.
+
+public class CurrentThreadName {
+    public static void main(String[] args) {
+        Thread thread = Thread.currentThread();
+        System.out.println("Current Thread: " + thread.getName());
+    }
+}

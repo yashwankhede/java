@@ -1,0 +1,91 @@
+1. Write a Java program to accept ‘n’ integers from the user and store them in a collection.
+Display them in the sorted order. The collection should not accept duplicate elements.
+(Use a suitable collection). Search for a particular element using predefined search
+method in the Collection framework. 
+
+
+import java.util.*;
+
+public class CollectionDemo {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of integers to be entered: ");
+        int n = sc.nextInt();
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter integer " + (i + 1) + ": ");
+            int num = sc.nextInt();
+            set.add(num);
+        }
+        List<Integer> list = new ArrayList<>(set);
+        Collections.sort(list);
+        System.out.println("The integers in sorted order are:");
+        for (int i : list) {
+            System.out.println(i);
+        }
+        System.out.print("Enter the element to search for: ");
+        int element = sc.nextInt();
+        if (set.contains(element)) {
+            System.out.println(element + " is present in the collection");
+        } else {
+            System.out.println(element + " is not present in the collection");
+        }
+        sc.close();
+    }
+}
+
+
+
+2. Write a java program to simulate traffic signal using threads
+
+
+import java.util.concurrent.*;
+
+public class TrafficSignal {
+    private volatile boolean stop = false;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    public void start() {
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            int count = 0;
+            public void run() {
+                if (stop) {
+                    scheduler.shutdown();
+                    return;
+                }
+                count++;
+                switch (count) {
+                    case 1:
+                        System.out.println("RED");
+                        break;
+                    case 2:
+                        System.out.println("RED-YELLOW");
+                        break;
+                    case 3:
+                        System.out.println("GREEN");
+                        break;
+                    case 4:
+                        System.out.println("YELLOW");
+                        count = 0;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }, 0, 2, TimeUnit.SECONDS);
+    }
+
+    public void stop() {
+        stop = true;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        TrafficSignal trafficSignal = new TrafficSignal();
+        trafficSignal.start();
+        Thread.sleep(10000); // wait for 10 seconds
+        trafficSignal.stop();
+    }
+}
+
+
+

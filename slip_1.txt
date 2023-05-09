@@ -1,0 +1,105 @@
+Q1.Write a Java program to display all the alphabets between ‘A’ to ‘Z’ after every 2
+seconds
+
+import java.util.concurrent.TimeUnit;
+
+public class AlphabetDisplay {
+    public static void main(String[] args) {
+        char alphabet = 'A'; // Start with alphabet 'A'
+        while (alphabet <= 'Z') { // Loop until 'Z'
+            System.out.print(alphabet + " "); // Display the current alphabet
+            alphabet++; // Move to the next alphabet
+            try {
+                TimeUnit.SECONDS.sleep(2); // Wait for 2 seconds before displaying the next alphabet
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+
+
+
+Q2.Write a Java program to accept the details of Employee (Eno, EName, Designation,
+Salary) from a user and store it into the database. (Use Swing) 
+
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+
+import javax.swing.*;
+
+public class EmployeeDetails extends JFrame implements ActionListener {
+    private static final long serialVersionUID = 1L;
+    JLabel enoLabel, enameLabel, desigLabel, salaryLabel;
+    JTextField enoField, enameField, desigField, salaryField;
+    JButton addButton;
+    Connection con;
+
+    public EmployeeDetails() {
+        enoLabel = new JLabel("Employee No:");
+        enameLabel = new JLabel("Employee Name:");
+        desigLabel = new JLabel("Designation:");
+        salaryLabel = new JLabel("Salary:");
+
+        enoField = new JTextField();
+        enameField = new JTextField();
+        desigField = new JTextField();
+        salaryField = new JTextField();
+
+        addButton = new JButton("Add Employee");
+        addButton.addActionListener(this);
+
+        JPanel panel = new JPanel(new GridLayout(5, 2));
+        panel.add(enoLabel);
+        panel.add(enoField);
+        panel.add(enameLabel);
+        panel.add(enameField);
+        panel.add(desigLabel);
+        panel.add(desigField);
+        panel.add(salaryLabel);
+        panel.add(salaryField);
+        panel.add(new JLabel(""));
+        panel.add(addButton);
+
+        add(panel);
+        setTitle("Employee Details");
+        setSize(300, 200);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "");
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String eno = enoField.getText();
+        String ename = enameField.getText();
+        String desig = desigField.getText();
+        String salary = salaryField.getText();
+        try {
+            Statement stmt = con.createStatement();
+            String query = "INSERT INTO employee (eno, ename, designation, salary) VALUES (" + eno + ", '" + ename + "', '" + desig + "', " + salary + ")";
+            stmt.executeUpdate(query);
+            JOptionPane.showMessageDialog(this, "Employee added successfully!");
+            enoField.setText("");
+            enameField.setText("");
+            desigField.setText("");
+            salaryField.setText("");
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error adding employee!");
+            ex.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        new EmployeeDetails().setVisible(true);
+    }
+}

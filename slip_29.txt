@@ -1,0 +1,86 @@
+Q1.
+
+import java.sql.*;
+
+public class DisplayColumnInformation {
+    static final String DB_URL = "jdbc:mysql://localhost/DATABASE_NAME";
+    static final String USER = "username";
+    static final String PASS = "password";
+
+    public static void main(String[] args) {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            // Open a connection to the database
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+            // Execute a query to select all columns from the DONAR table
+            stmt = conn.createStatement();
+            String sql = "SELECT * FROM DONAR";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            // Get the ResultSetMetaData object to display column information
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+            // Display column information for the DONAR table
+            int columnCount = rsmd.getColumnCount();
+            for (int i = 1; i <= columnCount; i++) {
+                String name = rsmd.getColumnName(i);
+                String type = rsmd.getColumnTypeName(i);
+                int size = rsmd.getColumnDisplaySize(i);
+                System.out.println("Column name: " + name);
+                System.out.println("Column type: " + type);
+                System.out.println("Column size: " + size);
+                System.out.println();
+            }
+
+            // Close the ResultSet, Statement and Connection objects
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            // Handle errors for JDBC
+            se.printStackTrace();
+        } catch (Exception e) {
+            // Handle errors for Class.forName
+            e.printStackTrace();
+        } finally {
+            // Close resources
+            try {
+                if (stmt != null)
+                    stmt.close();
+            } catch (SQLException se2) {
+            } // nothing we can do
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+}
+
+
+===========================
+Q2.
+
+import java.util.LinkedList;
+
+public class LinkedListDemo {
+    public static void main(String[] args) {
+        // Creating LinkedList of integer objects
+        LinkedList<Integer> linkedList = new LinkedList<Integer>();
+        
+        // Adding element at first position
+        linkedList.addFirst(10);
+        linkedList.addFirst(20);
+        linkedList.addFirst(30);
+        
+        // Deleting last element
+        linkedList.removeLast();
+        
+        // Displaying the size of link list
+        System.out.println("Size of LinkedList: " + linkedList.size());
+    }
+}

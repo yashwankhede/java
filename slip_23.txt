@@ -1,0 +1,64 @@
+Q1.
+
+
+import java.util.Scanner;
+
+public class VowelDisplay {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter a string: ");
+        String str = sc.nextLine();
+        sc.close();
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (isVowel(ch)) {
+                System.out.println(ch);
+                try {
+                    Thread.sleep(3000); // wait for 3 seconds
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    
+    // method to check if a character is a vowel
+    public static boolean isVowel(char ch) {
+        ch = Character.toUpperCase(ch);
+        return (ch == 'A' || ch == 'E' || ch == 'I' || ch == 'O' || ch == 'U');
+    }
+}
+
+
+==========================
+Q2.
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+public class StudentNames {
+    public static void main(String[] args) {
+        List<String> students = new ArrayList<String>();
+        
+        // Accept 'N' student names from command line
+        for(int i=0; i<args.length; i++) {
+            students.add(args[i]);
+        }
+        
+        // Display student names using Iterator
+        System.out.println("Student names using Iterator:");
+        Iterator<String> iterator = students.iterator();
+        while(iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+        
+        // Display student names using ListIterator
+        System.out.println("Student names using ListIterator:");
+        ListIterator<String> listIterator = students.listIterator();
+        while(listIterator.hasNext()) {
+            System.out.println(listIterator.next());
+        }
+    }
+}

@@ -1,0 +1,71 @@
+Q1. Design an HTML page which passes customer number to a search servlet. The servlet 
+searches for the customer number in a database (customer table) and returns customer
+details if found the number otherwise display error message
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Search Customer</title>
+  </head>
+  <body>
+    <h1>Search Customer</h1>
+    <form action="SearchServlet" method="GET">
+      <label for="customerNumber">Enter Customer Number:</label>
+      <input type="text" id="customerNumber" name="customerNumber">
+      <button type="submit">Search</button>
+    </form>
+  </body>
+</html>
+
+
+
+
+Q2.. Write a Java program to display information about all columns in the DONAR table 
+using ResultSetMetaData
+
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+
+public class DonarTableMetaData {
+    public static void main(String[] args) {
+        try {
+            // Load the JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+            
+            // Connect to the database
+            Connection conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/mydatabase", "root", "password");
+            
+            // Create a statement object
+            Statement stmt = conn.createStatement();
+            
+            // Execute the query
+            ResultSet rs = stmt.executeQuery("SELECT * FROM DONAR");
+            
+            // Get the metadata for the result set
+            ResultSetMetaData rsmd = rs.getMetaData();
+            
+            // Print the column names and types
+            int numColumns = rsmd.getColumnCount();
+            for (int i = 1; i <= numColumns; i++) {
+                System.out.println("Column name: " + rsmd.getColumnName(i));
+                System.out.println("Column type: " + rsmd.getColumnTypeName(i));
+                System.out.println();
+            }
+            
+            // Close the result set, statement, and connection
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            System.err.println(e);
+        }
+    }
+}

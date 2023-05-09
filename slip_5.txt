@@ -1,0 +1,115 @@
+1. Write a Java Program to create the hash table that will maintain the mobile number and
+student name. Display the details of student using Enumeration interface.
+
+
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+public class HashtableDemo {
+    public static void main(String[] args) {
+        // Create a Hashtable to store mobile numbers and student names
+        Hashtable<String, String> hashtable = new Hashtable<>();
+        
+        // Add student details to the Hashtable
+        hashtable.put("1234567890", "John");
+        hashtable.put("2345678901", "Mary");
+        hashtable.put("3456789012", "Peter");
+        hashtable.put("4567890123", "Alice");
+        
+        // Display the details of the students using Enumeration interface
+        System.out.println("Student Details:");
+        Enumeration<String> keys = hashtable.keys();
+        while (keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            String value = hashtable.get(key);
+            System.out.println("Mobile Number: " + key + ", Name: " + value);
+        }
+    }
+}
+
+
+
+2. Create a JSP page for an online multiple choice test. The questions are randomly selected
+from a database and displayed on the screen. The choices are displayed using radio
+buttons. When the user clicks on next, the next question is displayed. When the user
+clicks on submit, display the total score on the screen
+
+
+
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page import="java.sql.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Online Multiple Choice Test</title>
+</head>
+<body>
+<%
+    // Establish a database connection
+    Connection conn = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+    try {
+        Class.forName("com.mysql.jdbc.Driver");
+        conn = DriverManager.getConnection("jdbc:mysql://localhost/testdb", "username", "password");
+        stmt = conn.createStatement();
+    } catch (ClassNotFoundException e) {
+        out.println("Error: " + e.getMessage());
+    } catch (SQLException e) {
+        out.println("Error: " + e.getMessage());
+    }
+    
+    // Retrieve a random question from the database
+    String question = "";
+    String answer1 = "";
+    String answer2 = "";
+    String answer3 = "";
+    String answer4 = "";
+    int correctAnswer = 0;
+    try {
+        rs = stmt.executeQuery("SELECT * FROM questions ORDER BY RAND() LIMIT 1");
+        if (rs.next()) {
+            question = rs.getString("question");
+            answer1 = rs.getString("answer1");
+            answer2 = rs.getString("answer2");
+            answer3 = rs.getString("answer3");
+            answer4 = rs.getString("answer4");
+            correctAnswer = rs.getInt("correct_answer");
+        }
+    } catch (SQLException e) {
+        out.println("Error: " + e.getMessage());
+    }
+%>
+
+<form method="post">
+    <p><strong>Question:</strong> <%= question %></p>
+    <input type="radio" name="answer" value="1" id="answer1"><label for="answer1"><%= answer1 %></label><br>
+    <input type="radio" name="answer" value="2" id="answer2"><label for="answer2"><%= answer2 %></label><br>
+    <input type="radio" name="answer" value="3" id="answer3"><label for="answer3"><%= answer3 %></label><br>
+    <input type="radio" name="answer" value="4" id="answer4"><label for="answer4"><%= answer4 %></label><br>
+    <br>
+    <%-- Store the correct answer in a hidden field --%>
+    <input type="hidden" name="correctAnswer" value="<%= correctAnswer %>">
+    
+    <%-- Display the "Next" button unless this is the last question --%>
+    <% if (!rs.isLast()) { %>
+        <input type="submit" name="next" value="Next">
+    <% } %>
+    
+    <%-- Display the "Submit" button if this is the last question --%>
+    <% if (rs.isLast()) { %>
+        <input type="submit" name="submit" value="Submit">
+    <% } %>
+</form>
+
+<%
+    // Process the user's answer if the form was submitted
+    if (request.getParameter("submit") != null) {
+        int score = 0;
+        int totalQuestions = 0;
+        rs.beforeFirst();
+        while (rs.next()) {
+            totalQuestions++;
+            int correctAnswer = rs.getInt("correct_answer

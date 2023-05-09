@@ -1,0 +1,82 @@
+Q1.
+
+import java.util.Scanner;
+import java.util.TreeSet;
+
+public class SortedIntegers {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of integers: ");
+        int n = sc.nextInt();
+        System.out.println("Enter " + n + " integers:");
+        TreeSet<Integer> set = new TreeSet<>();
+        for (int i = 0; i < n; i++) {
+            int num = sc.nextInt();
+            set.add(num);
+        }
+        System.out.println("Sorted integers without duplicates:");
+        for (int num : set) {
+            System.out.print(num + " ");
+        }
+    }
+}
+
+============================
+Q2.
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class NumberDisplay implements Runnable {
+    private JTextField textField;
+    private JButton button;
+    private boolean stop = false;
+
+    public NumberDisplay(JTextField textField, JButton button) {
+        this.textField = textField;
+        this.button = button;
+    }
+
+    public void run() {
+        int i = 1;
+        while (!stop) {
+            try {
+                textField.setText(Integer.toString(i));
+                Thread.sleep(1000);
+                i++;
+                if (i == 101) {
+                    i = 1;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        JTextField textField = new JTextField();
+        JButton button = new JButton("Start");
+        JFrame frame = new JFrame("Number Display");
+        frame.setLayout(new BorderLayout());
+        frame.add(textField, BorderLayout.CENTER);
+        frame.add(button, BorderLayout.SOUTH);
+        frame.setSize(200, 100);
+        frame.setVisible(true);
+        button.addActionListener(new ActionListener() {
+            Thread t;
+            public void actionPerformed(ActionEvent ae) {
+                if (t == null) {
+                    t = new Thread(new NumberDisplay(textField, button));
+                    t.start();
+                    button.setText("Stop");
+                } else {
+                    NumberDisplay nd = (NumberDisplay) t.getTarget();
+                    nd.stop = true;
+                    t = null;
+                    button.setText("Start");
+                }
+            }
+        });
+    }
+}

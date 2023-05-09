@@ -1,0 +1,93 @@
+Q1.
+
+import java.util.*;
+
+public class ColorSet {
+    public static void main(String[] args) {
+        // Create a TreeSet to store the colors
+        TreeSet<String> colorSet = new TreeSet<String>();
+
+        // Add some colors to the TreeSet
+        colorSet.add("Red");
+        colorSet.add("Green");
+        colorSet.add("Blue");
+        colorSet.add("Yellow");
+        colorSet.add("Orange");
+
+        // Print out the contents of the TreeSet in ascending order
+        System.out.println("Colors in ascending order:");
+        for (String color : colorSet) {
+            System.out.println(color);
+        }
+    }
+}
+
+==============================
+Q2.
+
+import java.sql.*;
+
+public class Teacher {
+    public static void main(String[] args) {
+        try {
+            // Load the JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+
+            // Connect to the database
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "root", "password");
+
+            // Prepare the SQL statement to insert the teacher records
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO Teacher(TNo, TName, Subject) VALUES (?, ?, ?)");
+
+            // Insert at least 5 records into the Teacher table
+            ps.setInt(1, 1);
+            ps.setString(2, "John");
+            ps.setString(3, "JAVA");
+            ps.executeUpdate();
+
+            ps.setInt(1, 2);
+            ps.setString(2, "Mary");
+            ps.setString(3, "C++");
+            ps.executeUpdate();
+
+            ps.setInt(1, 3);
+            ps.setString(2, "Bob");
+            ps.setString(3, "JAVA");
+            ps.executeUpdate();
+
+            ps.setInt(1, 4);
+            ps.setString(2, "Alice");
+            ps.setString(3, "Python");
+            ps.executeUpdate();
+
+            ps.setInt(1, 5);
+            ps.setString(2, "Tom");
+            ps.setString(3, "JAVA");
+            ps.executeUpdate();
+
+            // Prepare the SQL statement to select the details of the Teacher teaching "JAVA" subject
+            PreparedStatement psSelect = conn.prepareStatement("SELECT TNo, TName, Subject FROM Teacher WHERE Subject = ?");
+
+            // Set the parameter to "JAVA"
+            psSelect.setString(1, "JAVA");
+
+            // Execute the SQL statement and get the result set
+            ResultSet rs = psSelect.executeQuery();
+
+            // Print out the details of the Teacher teaching "JAVA" subject
+            System.out.println("Details of Teacher teaching \"JAVA\" subject:");
+            System.out.println("TNo\tTName\tSubject");
+            while (rs.next()) {
+                System.out.println(rs.getInt(1) + "\t" + rs.getString(2) + "\t" + rs.getString(3));
+            }
+
+            // Close the result set, prepared statement, and connection
+            rs.close();
+            ps.close();
+            psSelect.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
