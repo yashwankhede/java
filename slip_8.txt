@@ -1,0 +1,77 @@
+1. Write a java program to define a thread for printing text on output screen for ‘n’ 
+number of times. Create 3 threads and run them. Pass the text ‘n’ parameters to the 
+thread constructor. 
+ Example: 
+i. First thread prints “COVID19” 10 times. 
+ii. Second thread prints “LOCKDOWN2020” 20 times 
+iii. Third thread prints “VACCINATED2021” 30 times
+
+
+
+
+class MyThread extends Thread {
+    private String text;
+    private int times;
+    
+    public MyThread(String text, int times) {
+        this.text = text;
+        this.times = times;
+    }
+    
+    public void run() {
+        for (int i = 0; i < times; i++) {
+            System.out.println(text);
+        }
+    }
+}
+
+public class ThreadExample {
+    public static void main(String[] args) {
+        MyThread t1 = new MyThread("COVID19", 10);
+        MyThread t2 = new MyThread("LOCKDOWN2020", 20);
+        MyThread t3 = new MyThread("VACCINATED2021", 30);
+        
+        t1.start();
+        t2.start();
+        t3.start();
+    }
+}
+
+
+
+2.Write a JSP program to check whether a given number is prime or not. Display the result 
+in red color.
+
+
+
+<%@ page language="java" %>
+<%@ page import="java.io.*, java.util.*" %>
+
+<%
+  int num = Integer.parseInt(request.getParameter("num"));
+  boolean isPrime = true;
+  
+  if(num == 1) {
+      isPrime = false;
+  } else {
+      for(int i = 2; i <= num/2; i++) {
+          if(num % i == 0) {
+              isPrime = false;
+              break;
+          }
+      }
+  }
+  
+  String result = isPrime ? "Prime" : "Not Prime";
+%>
+
+<html>
+  <head>
+    <title>Prime Number Checker</title>
+  </head>
+  <body>
+    <h1>Prime Number Checker</h1>
+    <p>The number <%= num %> is <font color="red"><%= result %></font>.</p>
+  </body>
+</html>
+

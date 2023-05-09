@@ -1,0 +1,87 @@
+Q1.Write a java program to read ‘N’ names of your friends, store it into HashSet and
+display them in ascending order. 
+
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.TreeSet;
+
+public class FriendNames {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Set<String> names = new HashSet<>(); // Create a HashSet to store the names
+        System.out.print("Enter the number of names: ");
+        int n = sc.nextInt();
+        sc.nextLine(); // Consume the newline character
+        for (int i = 1; i <= n; i++) {
+            System.out.print("Enter name " + i + ": ");
+            String name = sc.nextLine();
+            names.add(name); // Add the name to the HashSet
+        }
+        sc.close();
+        Set<String> sortedNames = new TreeSet<>(names); // Create a TreeSet to sort the names in ascending order
+        System.out.println("Names in ascending order:");
+        for (String name : sortedNames) {
+            System.out.println(name); // Display the names in ascending order
+        }
+    }
+}
+
+
+
+Q2.Design a servlet that provides information about a HTTP request from a client, such as
+IP-Address and browser type. The servlet also provides information about the server on
+which the servlet is running, such as the operating system type, and the names of
+currently loaded servlets. 
+
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.net.*;
+import java.util.*;
+
+public class RequestInfoServlet extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<html>");
+        out.println("<head><title>Request Information</title></head>");
+        out.println("<body>");
+
+        out.println("<h2>Client Request Information:</h2>");
+        out.println("<table border='1'>");
+        out.println("<tr><td>Request Method:</td><td>" + request.getMethod() + "</td></tr>");
+        out.println("<tr><td>Request URI:</td><td>" + request.getRequestURI() + "</td></tr>");
+        out.println("<tr><td>Request Protocol:</td><td>" + request.getProtocol() + "</td></tr>");
+        out.println("<tr><td>Remote Address:</td><td>" + request.getRemoteAddr() + "</td></tr>");
+        out.println("<tr><td>Remote Host:</td><td>" + request.getRemoteHost() + "</td></tr>");
+        out.println("<tr><td>Remote Port:</td><td>" + request.getRemotePort() + "</td></tr>");
+        out.println("<tr><td>User Agent:</td><td>" + request.getHeader("User-Agent") + "</td></tr>");
+        out.println("</table>");
+
+        out.println("<h2>Server Information:</h2>");
+        out.println("<table border='1'>");
+        out.println("<tr><td>Server Name:</td><td>" + request.getServerName() + "</td></tr>");
+        out.println("<tr><td>Server Port:</td><td>" + request.getServerPort() + "</td></tr>");
+        out.println("<tr><td>Server Software:</td><td>" + getServletContext().getServerInfo() + "</td></tr>");
+        out.println("<tr><td>OS Name:</td><td>" + System.getProperty("os.name") + "</td></tr>");
+        out.println("<tr><td>OS Version:</td><td>" + System.getProperty("os.version") + "</td></tr>");
+        out.println("<tr><td>Served Servlets:</td><td>" + getServedServlets() + "</td></tr>");
+        out.println("</table>");
+
+        out.println("</body></html>");
+    }
+
+    private String getServedServlets() {
+        StringJoiner joiner = new StringJoiner(", ");
+        ServletContext context = getServletContext();
+        Enumeration<String> servletNames = context.getServletNames();
+        while (servletNames.hasMoreElements()) {
+            joiner.add(servletNames.nextElement());
+        }
+        return joiner.toString();
+    }
+}

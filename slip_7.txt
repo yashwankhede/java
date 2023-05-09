@@ -1,0 +1,124 @@
+Q1. Write a java program that implements a multi-thread application that has three threads. 
+First thread generates random integer number after every one second, if the number is 
+even; second thread computes the square of that number and print it. If the number is 
+odd, the third thread computes the of cube of that number and print it.
+
+
+import java.util.Random;
+
+class RandomNumberThread extends Thread {
+    public void run() {
+        Random random = new Random();
+        for (int i = 1; i <= 10; i++) {
+            int number = random.nextInt(10) + 1;
+            System.out.println("Generated number: " + number);
+            if (number % 2 == 0) {
+                SquareThread squareThread = new SquareThread(number);
+                squareThread.start();
+            } else {
+                CubeThread cubeThread = new CubeThread(number);
+                cubeThread.start();
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+class SquareThread extends Thread {
+    private int number;
+
+    public SquareThread(int number) {
+        this.number = number;
+    }
+
+    public void run() {
+        int square = number * number;
+        System.out.println("Square of " + number + ": " + square);
+    }
+}
+
+class CubeThread extends Thread {
+    private int number;
+
+    public CubeThread(int number) {
+        this.number = number;
+    }
+
+    public void run() {
+        int cube = number * number * number;
+        System.out.println("Cube of " + number + ": " + cube);
+    }
+}
+
+public class MultiThreadDemo {
+    public static void main(String[] args) {
+        RandomNumberThread randomNumberThread = new RandomNumberThread();
+        randomNumberThread.start();
+    }
+}
+
+
+
+
+Q1. Write a java program for the following:
+i. To create a Product(Pid, Pname, Price) table.
+ii. Insert at least five records into the table.
+iii. Display all the records from a table. 
+
+
+
+import java.sql.*;
+
+public class ProductTable {
+    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://localhost/mydb";
+    static final String USER = "username";
+    static final String PASS = "password";
+
+    public static void main(String[] args) {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName(JDBC_DRIVER);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+
+            // Create Product table
+            String createTableSQL = "CREATE TABLE Product (" +
+                    "Pid INT NOT NULL, " +
+                    "Pname VARCHAR(50) NOT NULL, " +
+                    "Price DOUBLE NOT NULL, " +
+                    "PRIMARY KEY (Pid))";
+            stmt.executeUpdate(createTableSQL);
+
+            // Insert records into Product table
+            String insertRecordSQL = "INSERT INTO Product VALUES " +
+                    "(101, 'Product1', 10.50), " +
+                    "(102, 'Product2', 20.75), " +
+                    "(103, 'Product3', 15.00), " +
+                    "(104, 'Product4', 12.25), " +
+                    "(105, 'Product5', 18.50)";
+            stmt.executeUpdate(insertRecordSQL);
+
+            // Display all the records from Product table
+            String selectAllSQL = "SELECT * FROM Product";
+            ResultSet rs = stmt.executeQuery(selectAllSQL);
+            while (rs.next()) {
+                int pid = rs.getInt("Pid");
+                String pname = rs.getString("Pname");
+                double price = rs.getDouble("Price");
+                System.out.println("Pid: " + pid + ", Pname: " + pname + ", Price: " + price);
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,119 @@
+Q1. 
+
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.io.*,java.util.*" %>
+<%@include file="isPerfectNumber.java" %>
+
+<html>
+  <head>
+    <title>Check whether a number is perfect or not</title>
+  </head>
+  <body>
+    <h1>Check whether a number is perfect or not</h1>
+    <%
+        int number = Integer.parseInt(request.getParameter("number"));
+        if (isPerfectNumber(number)) {
+    %>
+        <p><%= number %> is a perfect number</p>
+    <%
+        } else {
+    %>
+        <p><%= number %> is not a perfect number</p>
+    <%
+        }
+    %>
+  </body>
+</html>
+
+--------------------
+isperfectNumber.java
+
+<%
+    boolean isPerfectNumber(int number) {
+        int sum = 0;
+        for (int i = 1; i <= number / 2; i++) {
+            if (number % i == 0) {
+                sum += i;
+            }
+        }
+        return sum == number;
+    }
+%>
+
+
+===============================
+Q2.
+
+import java.sql.*;
+import javax.swing.*;
+import javax.swing.table.*;
+
+public class ProjectTableExample extends JFrame {
+    private JTable projectTable;
+    private DefaultTableModel tableModel;
+
+    public ProjectTableExample() {
+        super("Project Table Example");
+
+        // Initialize table model
+        tableModel = new DefaultTableModel();
+        tableModel.addColumn("Project ID");
+        tableModel.addColumn("Project Name");
+        tableModel.addColumn("Project Description");
+        tableModel.addColumn("Project Status");
+
+        // Initialize table
+        projectTable = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(projectTable);
+
+        // Add components to frame
+        add(scrollPane);
+
+        // Set frame properties
+        setSize(600, 400);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Create and execute SQL query
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydatabase", "root", "password");
+            Statement stmt = con.createStatement();
+            String sql = "CREATE TABLE PROJECT (project_id INT, project_name VARCHAR(50), project_description VARCHAR(255), project_status VARCHAR(20))";
+            stmt.executeUpdate(sql);
+
+            // Insert values into table
+            sql = "INSERT INTO PROJECT VALUES (1, 'Project 1', 'This is project 1', 'Active')";
+            stmt.executeUpdate(sql);
+            sql = "INSERT INTO PROJECT VALUES (2, 'Project 2', 'This is project 2', 'Inactive')";
+            stmt.executeUpdate(sql);
+            sql = "INSERT INTO PROJECT VALUES (3, 'Project 3', 'This is project 3', 'Active')";
+            stmt.executeUpdate(sql);
+
+            // Retrieve values from table and add to table model
+            sql = "SELECT * FROM PROJECT";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                Object[] row = new Object[4];
+                row[0] = rs.getInt("project_id");
+                row[1] = rs.getString("project_name");
+                row[2] = rs.getString("project_description");
+                row[3] = rs.getString("project_status");
+                tableModel.addRow(row);
+            }
+
+            // Close connections
+            rs.close();
+            stmt.close();
+            con.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
+
+    public static void main(String[] args) {
+        ProjectTableExample frame = new ProjectTableExample();
+        frame.setVisible(true);
+    }
+}

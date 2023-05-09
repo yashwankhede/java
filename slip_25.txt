@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Voter Eligibility Checker</title>
+</head>
+<body>
+	<h1>Voter Eligibility Checker</h1>
+	<form action="" method="post">
+		<label for="name">Name:</label>
+		<input type="text" name="name" id="name" required><br><br>
+		<label for="age">Age:</label>
+		<input type="number" name="age" id="age" required><br><br>
+		<input type="submit" value="Check Eligibility">
+	</form>
+	<%
+		// Check if the form has been submitted
+		if(request.getMethod().equalsIgnoreCase("post")) {
+			// Retrieve the form data
+			String name = request.getParameter("name");
+			int age = Integer.parseInt(request.getParameter("age"));
+
+			// Check eligibility
+			if(age >= 18) {
+				out.println("<p>Congratulations " + name + "! You are eligible to vote.</p>");
+			} else {
+				out.println("<p>Sorry " + name + ", you are not eligible to vote yet.</p>");
+			}
+		}
+	%>
+</body>
+</html>

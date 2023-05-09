@@ -1,0 +1,113 @@
+Q1.
+
+
+import java.util.Scanner;
+import java.sql.*;
+
+public class EmployeeManagementSystem {
+    static final String DB_URL = "jdbc:mysql://localhost:3306/mydb";
+    static final String USER = "root";
+    static final String PASS = "root";
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            stmt = conn.createStatement();
+
+            int choice;
+            do {
+                System.out.println("\nMENU\n1. Insert\n2. Update\n3. Display\n4. Exit\nEnter your choice:");
+                choice = sc.nextInt();
+                switch (choice) {
+                    case 1:
+                        System.out.println("Enter ENo, EName, and Salary:");
+                        int eno = sc.nextInt();
+                        String ename = sc.next();
+                        int salary = sc.nextInt();
+                        String insertQuery = "INSERT INTO Employee VALUES (" + eno + ", '" + ename + "', " + salary + ")";
+                        stmt.executeUpdate(insertQuery);
+                        System.out.println("Record inserted successfully.");
+                        break;
+
+                    case 2:
+                        System.out.println("Enter ENo and Salary to update:");
+                        int enoToUpdate = sc.nextInt();
+                        int salaryToUpdate = sc.nextInt();
+                        String updateQuery = "UPDATE Employee SET Salary=" + salaryToUpdate + " WHERE ENo=" + enoToUpdate;
+                        stmt.executeUpdate(updateQuery);
+                        System.out.println("Record updated successfully.");
+                        break;
+
+                    case 3:
+                        String selectQuery = "SELECT * FROM Employee";
+                        ResultSet rs = stmt.executeQuery(selectQuery);
+                        while (rs.next()) {
+                            int enoToDisplay = rs.getInt("ENo");
+                            String enameToDisplay = rs.getString("EName");
+                            int salaryToDisplay = rs.getInt("Salary");
+                            System.out.println(enoToDisplay + "\t" + enameToDisplay + "\t" + salaryToDisplay);
+                        }
+                        rs.close();
+                        break;
+
+                    case 4:
+                        System.out.println("Exiting...");
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice. Please enter again.");
+                }
+            } while (choice != 4);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+            } catch (SQLException se2) {
+            }
+            try {
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+    }
+}
+
+
+====================
+Q2.
+
+<%@ page language="java" %>
+<html>
+   <head>
+      <title>Greeting Program</title>
+   </head>
+   <body>
+      <%
+         String name = request.getParameter("name");
+         String greeting = "";
+         java.util.Date date = new java.util.Date();
+         int hour = date.getHours();
+         if(hour >= 0 && hour < 12){
+            greeting = "Good Morning";
+         }else if(hour >= 12 && hour < 16){
+            greeting = "Good Afternoon";
+         }else if(hour >= 16 && hour < 21){
+            greeting = "Good Evening";
+         }else{
+            greeting = "Good Night";
+         }
+         out.println("<h2>" + greeting + " " + name + "!</h2>");
+      %>
+      <form action="greeting.jsp">
+         Enter your name: <input type="text" name="name">
+         <input type="submit" value="Greet me!">
+      </form>
+   </body>
+</html>
